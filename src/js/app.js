@@ -6,7 +6,7 @@ import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Stats from "stats.js";
 
 import matcap from "../img/matcap.png";
-import helvetikerFont from "../3d/fonts/helvetiker_regular.typeface.json";
+import helvetikerFont from "../fonts/helvetiker_regular.typeface.json";
 
 const FOV = 75;
 const NEAR = 0.1;
@@ -15,25 +15,27 @@ const FAR = 1000;
 const TEXT = "ThreeJS";
 
 class App {
-  sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight,
-  };
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(
-    FOV,
-    this.sizes.width / this.sizes.height,
-    NEAR,
-    FAR
-  );
-  renderer = new THREE.WebGLRenderer({
-    canvas: document.querySelector("canvas.webgl"),
-  });
-  fontLoader = new FontLoader();
-  gui = new dat.GUI();
+  constructor() {
+    this.sizes = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(
+      FOV,
+      this.sizes.width / this.sizes.height,
+      NEAR,
+      FAR
+    );
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: document.querySelector("canvas.webgl"),
+    });
+    this.fontLoader = new FontLoader();
+    this.gui = new dat.GUI();
+    this.stats = new Stats();
 
-  matcapTexture = new THREE.TextureLoader().load(matcap);
-  stats = new Stats();
+    this.matcapTexture = new THREE.TextureLoader().load(matcap);
+  }
 
   init() {
     this.renderer.setSize(this.sizes.width, this.sizes.height);
