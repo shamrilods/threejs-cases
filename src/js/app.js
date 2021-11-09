@@ -87,12 +87,19 @@ class App {
   }
 
   windowResizeHandler() {
-    this.sizes.width = window.innerWidth;
-    this.sizes.height = window.innerHeight;
-    this.camera.aspect = this.sizes.width / this.sizes.height;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.sizes.width, this.sizes.height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const needUpdate =
+      this.sizes.width !== width || this.sizes.height !== height;
+
+    if (needUpdate) {
+      this.renderer.setSize(width, height);
+      this.camera.aspect = width / height;
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.camera.updateProjectionMatrix();
+      this.sizes.width = width;
+      this.sizes.height = height;
+    }
   }
 
   render() {
