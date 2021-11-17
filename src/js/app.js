@@ -1,18 +1,11 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as dat from "dat.gui";
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Stats from "stats.js";
-
-import matcap from "../img/matcap.png";
-import helvetikerFont from "../fonts/helvetiker_regular.typeface.json";
 
 const FOV = 75;
 const NEAR = 0.1;
 const FAR = 1000;
-
-const TEXT = "ThreeJS";
 
 class App {
   constructor() {
@@ -30,11 +23,8 @@ class App {
     this.renderer = new THREE.WebGLRenderer({
       canvas: document.querySelector("canvas.webgl"),
     });
-    this.fontLoader = new FontLoader();
     this.gui = new dat.GUI();
     this.stats = new Stats();
-
-    this.matcapTexture = new THREE.TextureLoader().load(matcap);
   }
 
   init() {
@@ -51,35 +41,17 @@ class App {
     // Более плавное перемещение
     this.controls.enableDamping = true;
 
-    this.addText();
+    this.addMesh();
     this.addGui();
     this.render();
     document.body.appendChild(this.stats.dom);
     window.addEventListener("resize", this.windowResizeHandler.bind(this));
   }
 
-  addText() {
-    this.fontLoader.load(helvetikerFont, (font) => {
-      const textGeometry = new TextGeometry(TEXT, {
-        font: font,
-        size: 0.5,
-        height: 0.2,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness: 0.03,
-        bevelSize: 0.02,
-        bevelOffset: 0,
-        bevelSegments: 20,
-      });
-
-      textGeometry.center();
-
-      const text = new THREE.Mesh(
-        textGeometry,
-        new THREE.MeshMatcapMaterial({ matcap: this.matcapTexture })
-      );
-      this.scene.add(text);
-    });
+  addMesh() {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: "red" });
+    this.scene.add(new THREE.Mesh(geometry, material));
   }
 
   addGui() {
