@@ -7,6 +7,7 @@ import Stats from "stats.js";
 
 import matcap from "../img/matcap.png";
 import helvetikerFont from "../fonts/helvetiker_regular.typeface.json";
+import { SphereGeometry } from "three";
 
 const FOV = 75;
 const NEAR = 0.1;
@@ -51,35 +52,62 @@ class App {
     // Более плавное перемещение
     this.controls.enableDamping = true;
 
-    this.addText();
+    this.addMesh();
+    this.addLight();
     this.addGui();
     this.render();
     document.body.appendChild(this.stats.dom);
     window.addEventListener("resize", this.windowResizeHandler.bind(this));
   }
 
-  addText() {
-    this.fontLoader.load(helvetikerFont, (font) => {
-      const textGeometry = new TextGeometry(TEXT, {
-        font: font,
-        size: 0.5,
-        height: 0.2,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness: 0.03,
-        bevelSize: 0.02,
-        bevelOffset: 0,
-        bevelSegments: 20,
-      });
+  addLight() {
+    const light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(0, 0, 1);
+    this.scene.add(light);
+  }
 
-      textGeometry.center();
+  addMesh() {
+    const geometry = new SphereGeometry(0.2);
 
-      const text = new THREE.Mesh(
-        textGeometry,
-        new THREE.MeshMatcapMaterial({ matcap: this.matcapTexture })
-      );
-      this.scene.add(text);
+    const basicMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const basicMesh = new THREE.Mesh(geometry, basicMaterial);
+    basicMesh.position.x = -1;
+    this.scene.add(basicMesh);
+
+    const lambertMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+    const lambertMesh = new THREE.Mesh(geometry, lambertMaterial);
+    lambertMesh.position.x = -0.5;
+    this.scene.add(lambertMesh);
+
+    const phongMaterial = new THREE.MeshPhongMaterial({
+      color: 0xff0000,
+      shininess: 150,
     });
+    const phongMesh = new THREE.Mesh(geometry, phongMaterial);
+    this.scene.add(phongMesh);
+
+    const toonMaterial = new THREE.MeshToonMaterial({ color: 0xff0000 });
+    const toonMesh = new THREE.Mesh(geometry, toonMaterial);
+    toonMesh.position.x = 0.5;
+    this.scene.add(toonMesh);
+
+    const standardMaterial = new THREE.MeshStandardMaterial({
+      color: 0xff0000,
+      roughness: 0.5,
+      metalness: 0.5,
+    });
+    const standardMesh = new THREE.Mesh(geometry, standardMaterial);
+    standardMesh.position.x = 1;
+    this.scene.add(standardMesh);
+
+    const physicalMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0xff0000,
+      clearcoat: 0.5,
+      clearCoatRoughness: 0.5,
+    });
+    const physicalMesh = new THREE.Mesh(geometry, physicalMaterial);
+    physicalMesh.position.x = 1.5;
+    this.scene.add(physicalMesh);
   }
 
   addGui() {
