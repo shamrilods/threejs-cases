@@ -1,19 +1,12 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as dat from "dat.gui";
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Stats from "stats.js";
-
-import matcap from "../img/matcap.png";
-import helvetikerFont from "../fonts/helvetiker_regular.typeface.json";
 import { SphereGeometry } from "three";
 
 const FOV = 75;
 const NEAR = 0.1;
 const FAR = 1000;
-
-const TEXT = "ThreeJS";
 
 class App {
   constructor() {
@@ -31,11 +24,8 @@ class App {
     this.renderer = new THREE.WebGLRenderer({
       canvas: document.querySelector("canvas.webgl"),
     });
-    this.fontLoader = new FontLoader();
     this.gui = new dat.GUI();
     this.stats = new Stats();
-
-    this.matcapTexture = new THREE.TextureLoader().load(matcap);
   }
 
   init() {
