@@ -23,6 +23,7 @@ class App {
     this.renderer = new THREE.WebGLRenderer({
       canvas: document.querySelector("canvas.webgl"),
     });
+    this.textureLoader = new THREE.TextureLoader();
     this.gui = new dat.GUI();
     this.stats = new Stats();
   }
@@ -49,8 +50,12 @@ class App {
   }
 
   addMesh() {
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: "red" });
+    const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    const material = new THREE.MeshBasicMaterial({
+      map: this.textureLoader.load(
+        "https://threejsfundamentals.org/threejs/lessons/resources/images/mip-low-res-enlarged.png"
+      ),
+    });
     this.scene.add(new THREE.Mesh(geometry, material));
   }
 
